@@ -2,7 +2,25 @@ import re
 import curses
 import time
 
-class fake_system():
+class system_viewer():
+    
+    def show_list(self, stdsrc, iterable, axis_y=1, axis_x=1, column_size=25, commands=False):
+
+        for index, string in enumerate(iterable):
+            relative_column_position = (index//column_size)*len(string)
+            relative_row_position = (index%column_size)
+            y = axis_y+relative_row_position
+            x = axis_x+relative_column_position
+            # stdsrc.clear()
+            # stdsrc.addstr(1,1,f'x={x} y={y} command {commands}')
+            # stdsrc.refresh()
+            # stdsrc.getch()
+            stdsrc.addstr(y,x,string)
+            if commands and index == self._pointer:
+                stdsrc.addstr(y,x,string, curses.A_STANDOUT)
+        return x, y
+
+class fake_system(system_viewer):
 
     available_commands = ['store', 'load', 'add', 'addi', 'sub', 'subi',
                     'mul', 'muli', 'div', 'divi', 'jump', 'jpos', 'jzero']
@@ -46,14 +64,14 @@ class fake_system():
 
     def jpos(self, x:int):
         if self._register > 0:
-            self._pointer = x-1
+            self._pointer = x-2
 
     def jzero(self, x:int):
         if not self._register:
-            self._pointer = x-1
+            self._pointer = x-2
 
     def jump(self, x:int):
-        self._pointer = x-1
+        self._pointer = x-2
 
     def run(self):
         while self._pointer < len(self._commands):
@@ -66,29 +84,32 @@ class fake_system():
 
     def show_progress(self, stdsrc):
         stdsrc.clear()
-        command, value = self._commands[self._pointer]
         curses.noecho()
-        # curses.curs_set(0)
 
-        for index, cell in enumerate(self._memory):
-            memorycell = '|{:^12}|'.format(cell)
-            x, y = 45+((index//25)*15), (index%25)+3
-            stdsrc.addstr(y,x,memorycell)
-        
-        stdsrc.addstr(3+self._pointer, 115, '==>')
+        memorycell = []
+        comma = []
+
+        for index, cell in enumerate(self._memory[1::]):
+            memorycell.append('{:<4}[{:^6}] '.format(index+1, cell))
+
         for index, comm in enumerate(self._commands):
             str_command, str_value = comm
-            curses.curs_set(0)
-            comma = '|{:^12}|'.format(str_command) + '|{:^12}|'.format(str_value)
-            x, y = 120+((index//30)*13), (index%25)+3
-            stdsrc.addstr(y,x,comma)
-        stdsrc.addstr(4, 1, 'PC:       {:>15}'.format(self._pointer))
-        stdsrc.addstr(5, 1, 'COMMAND:  {:>15}'.format(command) + '{:>8}'.format(value))
-        # stdsrc.addstr(6, 1, 'MEM_VALUE:{:>15}'.format(str(self._memory[1:4]))) 
-        stdsrc.addstr(7, 1, 'REGISTER: {:>15}'.format(self._register))
+            comma.append('{:<4}|{:^7}| |{:^7}| '.format(index+1, str_command, str_value))
+
+        self.show_list(stdsrc, memorycell, axis_y=5,axis_x=1, column_size=33)
+        self.show_list(stdsrc, comma, axis_y=3, axis_x=45, column_size=36, commands=True)
+        self.show_program_status(stdsrc)
+
         stdsrc.refresh()
-        # time.sleep(.5)
         stdsrc.getch()
+
+    def show_program_status(self, stdsrc, axis_y=1, axis_x=1):
+        command, value = self._commands[self._pointer]
+
+        stdsrc.addstr(axis_y, axis_x, 'PC:       {:>15}'.format(self._pointer))
+        stdsrc.addstr(axis_y+1, axis_x, 'COMMAND:  {:>15}{:>8}'.format(command, value))
+        # stdsrc.addstr(axis_y+1, axis_x, 'MEM_VALUE:{:>15}'.format(str(self._memory[1:4]))) 
+        stdsrc.addstr(axis_y+3, axis_x, 'REGISTER: {:>15}'.format(self._register))
 
     def compile(self, text):
         any_string_after_comment_tag = f'{self._comment_tag}.*?\n'
@@ -101,3 +122,4 @@ class fake_system():
         for index, command_line in enumerate(commands_list):
             if command_line in self.available_commands:
                 self._commands.append((command_line,commands_list[index+1]))
+
