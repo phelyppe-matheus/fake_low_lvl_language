@@ -1,0 +1,24 @@
+00-        LOAD 0
+01-        ADDI 10 
+02-        STORE 1   // LOAD A=10
+03-        LOAD 0
+04-        ADDI 12
+05-        STORE 2   //LOAD B=12
+06-        LOAD 0
+07-        ADDI 30 
+08-        STORE 3   //LOAD C=30
+09-        LOAD 3
+10-        SUB 1 //C-A-B<0(A+B<C)
+11-        SUB 2
+12-        JPOS 14 // ENQUANTO A+B<C
+13-        JUMP 24 // CASO A+B>=C
+14-        LOAD 1 
+15-        ADDI 1 
+16-        STORE 1   //A=A+1
+17-        LOAD 2
+18-        ADDI 2
+19-        STORE 2   //B=B+2
+20-        LOAD 3
+21-        SUBI 1
+22-        STORE 3   //C=C-1
+23-        JUMP 09   //RETORNA AO WHILE
