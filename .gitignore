@@ -1,4 +1,2 @@
-bublesort
-fake_code
-__pycache__/pseudo_code.cpython-38.pyc
 .gitignore
+__pycache__/pseudo_code.cpython-38.pyc
