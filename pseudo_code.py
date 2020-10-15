@@ -94,7 +94,7 @@ class fake_system(system_viewer):
 
         for index, comm in enumerate(self._commands):
             str_command, str_value = comm
-            comma.append('{:<4}|{:^7}| |{:^7}| '.format(index+1, str_command, str_value))
+            comma.append('{:<4}|{:<7} {:>7}| '.format(index+1, str_command, str_value))
 
         self.show_list(stdsrc, memorycell, axis_y=5,axis_x=1, column_size=33)
         self.show_list(stdsrc, comma, axis_y=3, axis_x=45, column_size=36, commands=True)
@@ -119,7 +119,16 @@ class fake_system(system_viewer):
         commands_text = commands_text.replace('\n', ' ')
         commands_list = commands_text.split()
 
-        for index, command_line in enumerate(commands_list):
-            if command_line in self.available_commands:
-                self._commands.append((command_line,commands_list[index+1]))
+        for index, command in enumerate(commands_list):
+            if command in self.available_commands:
+                try:
+                    value = int(commands_list[index+1])
+                    self._commands.append((command,value))
+                except ValueError:
+                    traceback = -5 if len(self._commands) > 5 else 0
+                    for index, previous_lines in enumerate(self._commands[traceback::]):
+                        print(f'{len(self._commands)-4+index}{previous_lines}')
+                    print(f'Error on line {len(self._commands)+1}, value isn\'t right')
+                    exit()
+                
 
