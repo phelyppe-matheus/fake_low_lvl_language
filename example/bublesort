@@ -16,120 +16,106 @@ store 95  // carrega o conteúdo 1  na posição 5 do vetor
 load 0
 addi 1
 store 96  // carrega o conteúdo 1  na variavel 'i'
+load 96 // inicio do for externo
 subi 4
-load 96 // inicio do fim externo
-addi 1
-jpos 'fim do para externo'
+jpos 122 // pula para o fim do for externo
+    load 96
     store 97
-    load 97 // inicio do fim interno
-    subi 5
-    jpos 'fim do para interno'
-        load 96
-        subi 1
-            jpos 'proximo if'
-                load  91
-                jump  'fim do switch'
-            subi  1
-            jpos 'proximo if'
-                load  92
-                jump  'fim do switch'
-            subi  1
-            jpos 'proximo if'
-                load  93
-                jump  'fim do switch'
-            subi  1
-            jpos 'proximo if'
-                load  94
-                jump  'fim do switch'
-            subi  1
-            jpos 'proximo if'
-                load  95
-                jump  'fim do switch'
-        store 98  // A[i]
-        load 97
-        subi 1
-            jpos 'proximo if'
-                load  91
-                jump  'fim do switch'
-            subi  1
-            jpos 'proximo if'
-                load  92
-                jump  'fim do switch'
-            subi  1
-            jpos 'proximo if'
-                load  93
-                jump  'fim do switch'
-            subi  1
-            jpos 'proximo if'
-                load  94
-                jump  'fim do switch'
-            subi  1
-            jpos 'proximo if'
-                load  95
-                jump  'fim do switch'
-        store 99 // A[j]
-            load 99
-            sub  98
-            jpos 'fim do if'
-                load 96
-                subi 1
-                    jpos 'proximo if'
-                        load 99
-                        store  91
-                        jump  'fim do switch'
-                    subi  1
-                    jpos 'proximo if'
-                        load 99
-                        store  92
-                        jump  'fim do switch'
-                    subi  1
-                    jpos 'proximo if'
-                        load 99
-                        store  93
-                        jump  'fim do switch'
-                    subi  1
-                    jpos 'proximo if'
-                        load 99
-                        store  94
-                        jump  'fim do switch'
-                    subi  1
-                    jpos 'proximo if'
-                        load 99
-                        store  95
-                        jump  'fim do switch'
-                load 97
-                subi 1
-                    jpos 'proximo if'
-                        load  98
-                        store 91
-                        jump  'fim do switch'
-                    subi  1
-                    jpos 'proximo if'
-                        load  98
-                        store 92
-                        jump  'fim do switch'
-                    subi  1
-                    jpos 'proximo if'
-                        load  98
-                        store 93
-                        jump  'fim do switch'
-                    subi  1
-                    jpos 'proximo if'
-                        load  98
-                        store 94
-                        jump  'fim do switch'
-                    subi  1
-                    jpos 'proximo if'
-                        load  98
-                        store 95
-                        jump  'fim do switch'
-    load 97
+    load 97 // inicio do for interno
     addi 1
-    store 97 // decrementa variável 'j'
-    jump 'inicio do fim interno'
-load 96
+    store 97
+    subi 5
+    jpos 117 // pula para o fim do for interno
+        load 96  // pega o valor na posição i [96]
+        subi 1 // inicio de um if
+            jpos 34 // pula para o fim desse if
+            load 91
+            jump 47 // pula para o fim desse switch
+        subi 1 // inicio de um if
+            jpos 38 // pula para o fim desse if
+            load 92
+            jump 47 // pula para o fim desse switch
+        subi 1 // inicio de um if
+            jpos 42 // pula para o fim desse if
+            load 93
+            jump 47 // pula para o fim desse switch
+        subi 1 // inicio de um if
+            jpos 46 // pula para o fim desse if
+            load 94
+            jump 47 // pula para o fim desse switch
+            load 95
+        store 98 // carrega o valor A[i]
+        load 97  // pega o valor na posição j [97]
+        subi 1 // inicio de um if
+            jpos 53 // pula para o fim desse if
+            load 91
+            jump 66 // pula para o fim desse switch
+        subi 1 // inicio de um if
+            jpos 57 // pula para o fim desse if
+            load 92
+            jump 66 // pula para o fim desse switch
+        subi 1 // inicio de um if
+            jpos 61 // pula para o fim desse if
+            load 93
+            jump 66 // pula para o fim desse switch
+        subi 1 // inicio de um if
+            jpos 65 // pula para o fim desse if
+            load 94
+            jump 66 // pula para o fim desse switch
+            load 95
+        store 99 // carrega o valor A[j]
+        load 99
+        sub 98
+        jpos 116 // pula para o fim desse switch
+            load 96  // pega o valor na posição i [96]
+            subi 1 // inicio de um if
+                jpos 76 // pula para o fim desse if
+                load 99
+                store 91
+                jump 93 // pula para o fim desse switch
+            subi 1 // inicio de um if
+                jpos 81 // pula para o fim desse if
+                load 99
+                store 92
+                jump 93 // pula para o fim desse switch
+            subi 1 // inicio de um if
+                jpos 86 // pula para o fim desse if
+                load 99
+                store 93
+                jump 93 // pula para o fim desse switch
+            subi 1 // inicio de um if
+                jpos 91 // pula para o fim desse if
+                load 99
+                store 94
+                jump 93 // pula para o fim desse switch
+                load 99
+                store 95
+            load 97  // pega o valor na posição i [97]
+            subi 1 // inicio de um if
+                jpos 99 // pula para o fim desse if
+                load 98
+                store 91
+                jump 116 // pula para o fim desse switch
+            subi 1 // inicio de um if
+                jpos 104 // pula para o fim desse if
+                load 98
+                store 92
+                jump 116 // pula para o fim desse switch
+            subi 1 // inicio de um if
+                jpos 109 // pula para o fim desse if
+                load 98
+                store 93
+                jump 116 // pula para o fim desse switch
+            subi 1 // inicio de um if
+                jpos 114 // pula para o fim desse if
+                load 98
+                store 94
+                jump 116 // pula para o fim desse switch
+                load 98
+                store 95
+    jump 24 // pula para o início do for interno
+load 96 // fim do for interno
 addi 1
-store 96 // decrementa variável 'i'
-jump 'inicio do fim externo'
-'fim do para interno'
-'fim do para externo'
+store 96
+jump 19 // pula para o início do for externo
+// fim do for externo
