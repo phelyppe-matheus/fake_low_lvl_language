@@ -10,8 +10,8 @@ python main.py example\bublesort
 
 
 ## Common structures on Linguagem Muito Simples
-
-```{.line-numbers}
+### FOR / WHILE
+```javascript {.line-numbers}
 // int i;
 // i = 1;
 // while(1<5){
