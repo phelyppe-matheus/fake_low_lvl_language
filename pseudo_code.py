@@ -3,22 +3,35 @@ import curses
 import time
 
 class system_viewer():
-    
-    def show_list(self, stdsrc, iterable, axis_y=1, axis_x=1, column_size=25, commands=False):
+
+    def show_list(self, stdsrc, iterable, axis_y=1, column_size=25, axis_x=1, commands=False): 
+        x = y = 0
+        max_y, max_x = stdsrc.getmaxyx()
+        spare_y = max_y - axis_y
+        spare_x = max_x - axis_x
+
+        rows = spare_x//len(iterable[0])
+        columns = spare_y - 1
+
+        spare_cells = rows*columns
+
+        if commands:
+            section_begin = (self._pointer//spare_cells)*spare_cells
+            section_end = section_begin+spare_cells
+            iterable = iterable[section_begin:section_end:]
+            # stdsrc.addstr(max_y-1, max_x-50, f"begin {section_begin}, end {section_end}, p {self._pointer}")
 
         for index, string in enumerate(iterable):
-            relative_column_position = (index//column_size)*len(string)
-            relative_row_position = (index%column_size)
+            relative_column_position = (index//columns)*len(string)
+            relative_row_position = (index%columns)
             y = axis_y+relative_row_position
             x = axis_x+relative_column_position
-            # stdsrc.clear()
-            # stdsrc.addstr(1,1,f'x={x} y={y} command {commands}')
-            # stdsrc.refresh()
-            # stdsrc.getch()
             stdsrc.addstr(y,x,string)
-            if commands and index == self._pointer:
+            if commands and section_begin+index == self._pointer:
                 stdsrc.addstr(y,x,string, curses.A_STANDOUT)
-        return x, y
+
+        return x+len(iterable[0]), y
+
 
 class fake_system(system_viewer):
 
@@ -96,12 +109,27 @@ class fake_system(system_viewer):
             str_command, str_value = comm
             comma.append('{:<4}|{:<7} {:>7}| '.format(index+1, str_command, str_value))
 
-        self.show_list(stdsrc, memorycell, axis_y=5,axis_x=1, column_size=33)
-        self.show_list(stdsrc, comma, axis_y=3, axis_x=45, column_size=36, commands=True)
-        self.show_program_status(stdsrc)
+        try:
+            x, _ = self.show_list(stdsrc, memorycell, axis_y=5,axis_x=1, column_size=33)
+            self.show_list(stdsrc, comma, axis_y=3, axis_x=x, column_size=36, commands=True)
+
+            self.show_program_status(stdsrc)
+        except curses.error as e:
+            x, y = stdsrc.getmaxyx()
+            y = (y//2)-27 if (y//2)-27 > 0 else 0
+
+            stdsrc.clear()
+            stdsrc.addstr(x//2, y, 'This window is too tight. Please open up your Terminal')
+        except ZeroDivisionError:
+            x, y = stdsrc.getmaxyx()
+            y = (y//2)-27 if (y//2)-27 > 0 else 0
+
+            stdsrc.clear()
+            stdsrc.addstr(x//2, y, 'There\'s no space for any cell')
+
 
         stdsrc.refresh()
-        stdsrc.getch()
+        while stdsrc.getch() != 10: pass
 
     def show_program_status(self, stdsrc, axis_y=1, axis_x=1):
         command, value = self._commands[self._pointer]
