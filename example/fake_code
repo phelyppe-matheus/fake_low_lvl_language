@@ -10,8 +10,8 @@
 09-        LOAD 3
 10-        SUB 1 //C-A-B<0(A+B<C)
 11-        SUB 2
-12-        JPOS 14 // ENQUANTO A+B<C
-13-        JUMP 24 // CASO A+B>=C
+12-        JPOS 15 // ENQUANTO A+B<C
+13-        JUMP 25 // CASO A+B>=C
 14-        LOAD 1 
 15-        ADDI 1 
 16-        STORE 1   //A=A+1
